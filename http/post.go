@@ -11,10 +11,13 @@ import (
 // 发送POST请求
 // url:请求地址，data:POST请求提交的数据,contentType:请求体格式，如：application/json
 // content:请求放回的内容
-func Post(url string, data interface{}, contentType string) (content string) {
+func Post(url string, data interface{}, contentType string, headers map[string]string) (content string) {
 	jsonStr, _ := json.Marshal(data)
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
 	req.Header.Add("content-type", contentType)
+	for k, v := range headers {
+		req.Header.Add(k, v)
+	}
 	if err != nil {
 		panic(err)
 	}
