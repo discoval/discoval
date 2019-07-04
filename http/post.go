@@ -12,9 +12,15 @@ import (
 // 发送POST请求
 // url:请求地址，data:POST请求提交的数据,contentType:请求体格式，如：application/json
 // content:请求放回的内容
-func Post(url string, data interface{}, contentType string, headers map[string]string, insecureSkipVerify bool) (content string) {
-	jsonStr, _ := json.Marshal(data)
+func Post(url string, data interface{}, contentType string, headers map[string]string, insecureSkipVerify bool) (content string, errRsp error) {
+	jsonStr, err := json.Marshal(data)
+	if err != nil {
+		return "", err
+	}
 	req, err := http.NewRequest("POST", url, bytes.NewBuffer(jsonStr))
+	if err != nil {
+		return "", err
+	}
 	req.Header.Add("content-type", contentType)
 	for k, v := range headers {
 		req.Header.Add(k, v)
@@ -33,13 +39,16 @@ func Post(url string, data interface{}, contentType string, headers map[string]s
 		Timeout: 5 * time.Second,
 		Transport: tr,
 	}
-	resp, error := client.Do(req)
-	if error != nil {
-		panic(error)
+	resp, err := client.Do(req)
+	if err != nil {
+		return "", err
 	}
 	defer resp.Body.Close()
 
-	result, _ := ioutil.ReadAll(resp.Body)
+	result, err := ioutil.ReadAll(resp.Body)
+	if err != nil {
+		return "", err
+	}
 	content = string(result)
 	return
 }
