@@ -25,9 +25,6 @@ func Post(url string, data interface{}, contentType string, headers map[string]s
 	for k, v := range headers {
 		req.Header.Add(k, v)
 	}
-	if err != nil {
-		panic(err)
-	}
 	defer req.Body.Close()
 
 	//跳过证书验证
