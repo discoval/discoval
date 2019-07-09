@@ -2,6 +2,7 @@ package http
 
 import (
 	"crypto/tls"
+	"fmt"
 	"io/ioutil"
 	"net/http"
 	"time"
@@ -31,6 +32,7 @@ func Delete(url string, contentType string, headers map[string]string, insecureS
 	if error != nil {
 		panic(error)
 	}
+	fmt.Println("查看http返回值：",resp)
 	defer resp.Body.Close()
 
 	result, _ := ioutil.ReadAll(resp.Body)
