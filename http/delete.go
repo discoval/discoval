@@ -17,6 +17,7 @@ func Delete(url string, contentType string, headers map[string]string, insecureS
 	if err != nil {
 		panic(err)
 	}
+	fmt.Println("查看http请求：",req)
 	defer req.Body.Close()
 
 	//跳过证书验证
